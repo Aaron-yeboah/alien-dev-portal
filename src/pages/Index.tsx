@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import alienImg from "@/assets/alien.jpeg";
 import GlassNavButton from "@/components/GlassNavButton";
 import BinaryRain from "@/components/BinaryRain";
@@ -19,9 +20,9 @@ const Index = () => {
       <BinaryRain />
       <div className="relative z-10 flex min-h-screen flex-col">
         <div className="flex flex-1 items-center justify-center px-6">
-          <div className="flex flex-col-reverse lg:flex-row items-center gap-8 lg:gap-16 max-w-6xl w-full justify-end">
+          <div className="flex flex-row items-center gap-6 sm:gap-8 lg:gap-16 max-w-6xl w-full justify-center lg:justify-end">
             {/* Nav Buttons - left of alien */}
-            <div className="flex flex-col gap-5 items-end text-right">
+            <div className="flex flex-col gap-4 items-end text-right">
               <motion.h1
                 className="font-display text-2xl md:text-3xl neon-text mb-4 tracking-widest"
                 initial={{ opacity: 0, y: -20 }}
@@ -58,7 +59,7 @@ const Index = () => {
               <img
                 src={alienImg}
                 alt="Alien Grey holding a glowing orb"
-                className="w-72 sm:w-80 md:w-96 lg:w-[480px] rounded-lg relative z-10"
+                className="w-48 sm:w-64 md:w-80 lg:w-[480px] rounded-lg relative z-10"
               />
               {/* Orb glow overlay */}
               <motion.div
@@ -91,7 +92,11 @@ const Index = () => {
         {/* Footer */}
         <footer className="relative z-10 py-4 text-center border-t border-border/30">
           <p className="text-muted-foreground text-xs font-mono tracking-wider">
-            © {new Date().getFullYear()} ALIEN DEV — All rights reserved.
+            © {new Date().getFullYear()}{" "}
+            <Link to="/admin" className="hover:neon-text transition-all duration-300 cursor-pointer">
+              ALIEN DEV
+            </Link>{" "}
+            — All rights reserved.
           </p>
         </footer>
       </div>
