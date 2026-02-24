@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, Mail, Github, MessageSquare, MapPin, Clock, Wifi } from "lucide-react";
-import alienImg from "@/assets/alien.jpeg";
+import alienImg from "@/assets/contact-alien.png";
 import BinaryRain from "@/components/BinaryRain";
 import PageTransition from "@/components/PageTransition";
 import BackButton from "@/components/BackButton";
+import TopNav from "@/components/TopNav";
 
 const contactChannels = [
   { icon: Mail, label: "EMAIL", value: "alien@devterminal.io" },
@@ -40,32 +41,54 @@ const Contact = () => {
   return (
     <PageTransition>
       <BinaryRain />
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-6 py-16">
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-6 py-20 lg:py-16">
         <BackButton />
-        <div className="flex flex-col lg:flex-row items-center gap-12 max-w-5xl w-full">
-          {/* Terminal */}
+        <TopNav />
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12 max-w-5xl w-full">
+          {/* Alien monitoring - Visible on all screens, top on mobile */}
           <motion.div
-            className="flex-1 w-full"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            className="flex-shrink-0 lg:order-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="glass-panel neon-border p-6">
+            <div className="relative group mx-auto max-w-[200px] sm:max-w-[280px] md:max-w-none">
+              <img
+                src={alienImg}
+                alt="Alien monitoring transmission"
+                className="w-full md:w-80 rounded-2xl opacity-100 mix-blend-lighten drop-shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all duration-500 group-hover:drop-shadow-[0_0_25px_rgba(var(--primary),0.5)] group-hover:scale-[1.02]"
+              />
+              <div className="absolute inset-0 -z-10 blur-3xl opacity-30 bg-primary rounded-full scale-75" />
+
+              {/* Decorative frame elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 sm:w-12 sm:h-12 border-t-2 border-r-2 border-primary/40 group-hover:border-primary/80 transition-colors" />
+              <div className="absolute -bottom-4 -left-4 w-8 h-8 sm:w-12 sm:h-12 border-b-2 border-l-2 border-primary/40 group-hover:border-primary/80 transition-colors" />
+            </div>
+          </motion.div>
+
+          {/* Terminal */}
+          <motion.div
+            className="flex-1 w-full lg:order-1"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="glass-panel neon-border p-5 md:p-6 lg:ml-0 overflow-hidden">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                <div className="w-3 h-3 rounded-full bg-accent/60" />
-                <div className="w-3 h-3 rounded-full bg-primary/60" />
-                <span className="ml-3 text-xs text-muted-foreground font-mono">
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-destructive/60" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-accent/60" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-primary/60" />
+                <span className="ml-2 sm:ml-3 text-[10px] sm:text-xs text-muted-foreground font-mono truncate">
                   xeno-terminal v3.7.1 — secure channel
                 </span>
               </div>
               <div className="h-px bg-primary/20 mb-4" />
 
-              <div className="h-48 overflow-y-auto mb-4 space-y-1 scanline p-2">
+              <div className="h-40 sm:h-48 overflow-y-auto mb-4 space-y-1 scanline p-2">
                 {lines.map((line, i) => (
                   <motion.p
                     key={i}
-                    className="text-xs text-primary/80 font-mono"
+                    className="text-[10px] sm:text-xs text-primary/80 font-mono break-words"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
@@ -75,16 +98,16 @@ const Contact = () => {
                 ))}
               </div>
 
-              <form onSubmit={handleSubmit} className="flex gap-3">
+              <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Type your message..."
-                  className="flex-1 bg-transparent border border-primary/20 text-foreground text-sm px-4 py-2 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/50"
+                  placeholder="Type message..."
+                  className="flex-1 bg-transparent border border-primary/20 text-foreground text-xs sm:text-sm px-3 sm:px-4 py-2 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/50 transition-colors"
                 />
                 <motion.button
                   type="submit"
-                  className="glass-panel px-4 py-2 text-primary hover:neon-text transition-all"
+                  className="glass-panel px-3 sm:px-4 py-2 text-primary hover:neon-text transition-all"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -93,38 +116,21 @@ const Contact = () => {
               </form>
 
               {/* Contact channels grid */}
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
                 {contactChannels.map((channel, i) => (
                   <motion.div
                     key={channel.label}
-                    className="glass-panel p-3 text-center"
+                    className="glass-panel p-2 sm:p-3 text-center group"
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 + i * 0.08 }}
                   >
-                    <channel.icon className="w-4 h-4 text-primary mx-auto mb-1" />
-                    <div className="text-[10px] text-muted-foreground mb-0.5">{channel.label}</div>
-                    <div className="text-xs neon-text font-mono truncate">{channel.value}</div>
+                    <channel.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary mx-auto mb-1 group-hover:neon-text transition-all" />
+                    <div className="text-[8px] sm:text-[10px] text-muted-foreground mb-0.5">{channel.label}</div>
+                    <div className="text-[10px] sm:text-xs neon-text font-mono truncate">{channel.value}</div>
                   </motion.div>
                 ))}
               </div>
-            </div>
-          </motion.div>
-
-          {/* Alien watching */}
-          <motion.div
-            className="flex-shrink-0 hidden lg:block"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="relative">
-              <img
-                src={alienImg}
-                alt="Alien monitoring transmission"
-                className="w-64 rounded-lg opacity-80"
-              />
-              <div className="absolute inset-0 -z-10 blur-3xl opacity-20 bg-primary rounded-full" />
             </div>
           </motion.div>
         </div>
