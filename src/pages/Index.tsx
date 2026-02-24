@@ -31,23 +31,25 @@ const Index = () => {
               >
                 ALIEN DEV
               </motion.h1>
-              <motion.p
-                className="text-muted-foreground text-xs md:text-sm mb-4 md:mb-6 max-w-xs leading-relaxed font-mono"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-              >
-                &gt; TRANSMISSION INCOMING..._
-              </motion.p>
-              <div className="flex flex-col gap-3 md:gap-4 w-full max-w-[280px] md:max-w-none">
-                {navItems.map((item, i) => (
-                  <GlassNavButton
-                    key={item.to}
-                    {...item}
-                    index={i}
-                    onHover={setOrbIntensity}
-                  />
-                ))}
+              <div className="flex flex-col gap-2 md:gap-3 items-center lg:items-end w-full">
+                <motion.p
+                  className="text-primary/70 text-[10px] md:text-xs mb-2 max-w-xs leading-relaxed font-mono tracking-[0.3em] uppercase lg:text-right"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  &gt; TRANSMISSION INCOMING..._
+                </motion.p>
+                <div className="flex flex-col gap-3 md:gap-4 w-full max-w-[200px] sm:max-w-[280px] md:max-w-none items-center lg:items-end">
+                  {navItems.map((item, i) => (
+                    <GlassNavButton
+                      key={item.to}
+                      {...item}
+                      index={i}
+                      onHover={setOrbIntensity}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 

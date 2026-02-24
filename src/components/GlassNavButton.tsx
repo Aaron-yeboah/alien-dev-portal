@@ -16,13 +16,13 @@ const GlassNavButton = ({ to, label, index, onHover }: GlassNavButtonProps) => (
   >
     <Link to={to}>
       <motion.div
-        className="glass-panel scanline px-6 sm:px-10 py-4 sm:py-5 cursor-pointer relative overflow-hidden group w-44 sm:w-56"
+        className="glass-panel scanline px-4 sm:px-10 py-4 sm:py-5 cursor-pointer relative overflow-hidden group w-full max-w-[200px] sm:max-w-[280px] flex items-center justify-center mx-auto lg:mx-0"
         whileHover={{ scale: 1.05, x: -8 }}
         whileTap={{ scale: 0.97 }}
         onHoverStart={() => onHover(true)}
         onHoverEnd={() => onHover(false)}
       >
-        <span className="font-display text-sm tracking-[0.3em] text-foreground group-hover:neon-text transition-all duration-300">
+        <span className="font-display text-[10px] sm:text-xs tracking-[0.3em] text-foreground group-hover:neon-text transition-all duration-300 text-center uppercase">
           {label}
         </span>
         <motion.div
