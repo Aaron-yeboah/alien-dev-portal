@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Shield, Cpu, Globe, Zap } from "lucide-react";
+import { Shield, Cpu, Globe, Zap, FileText } from "lucide-react";
 import alienImg from "@/assets/alien.jpeg";
 import BinaryRain from "@/components/BinaryRain";
 import PageTransition from "@/components/PageTransition";
@@ -70,6 +70,23 @@ const About = () => (
                 </motion.div>
               ))}
             </div>
+
+            <motion.a
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass-panel neon-border mt-6 px-6 py-3 flex items-center justify-center gap-3 cursor-pointer group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <FileText className="w-5 h-5 text-primary group-hover:neon-text transition-all" />
+              <span className="font-display text-sm tracking-[0.2em] text-foreground group-hover:neon-text transition-all">
+                VIEW CV
+              </span>
+            </motion.a>
           </div>
         </motion.div>
       </div>
