@@ -13,8 +13,21 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+import { useEffect } from "react";
+import { persistence } from "./utils/persistence";
+
 const AnimatedRoutes = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    // Only increment once per session to avoid spamming the database
+    const hasVisited = sessionStorage.getItem("alien_visited");
+    if (!hasVisited) {
+      persistence.incrementViewerCount();
+      sessionStorage.setItem("alien_visited", "true");
+    }
+  }, []);
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
