@@ -153,7 +153,8 @@ const Contact = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       autoComplete="off"
-                      className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-3 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/20 transition-all hover:bg-primary/5"
+                      placeholder="Your name or alias..."
+                      className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-3 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/30 transition-all hover:bg-primary/5"
                       required
                     />
                   </div>
@@ -164,10 +165,22 @@ const Contact = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       autoComplete="off"
-                      className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-3 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/20 transition-all hover:bg-primary/5"
+                      placeholder="your@email.com"
+                      className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-3 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/30 transition-all hover:bg-primary/5"
                       required
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[8px] text-primary/40 font-mono uppercase tracking-[0.3em] pl-1">Transmission_Subject</label>
+                  <input
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    autoComplete="off"
+                    placeholder="What is this about? e.g. Job Opportunity, Collaboration..."
+                    className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-3 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/30 transition-all hover:bg-primary/5"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -176,7 +189,8 @@ const Contact = () => {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={4}
-                    className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-4 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/20 transition-all hover:bg-primary/5 resize-none"
+                    placeholder="Type your message here..."
+                    className="w-full bg-black/40 border border-primary/10 text-foreground text-xs px-4 py-4 font-mono focus:outline-none focus:border-primary/60 placeholder:text-muted-foreground/30 transition-all hover:bg-primary/5 resize-none"
                     required
                   />
                 </div>

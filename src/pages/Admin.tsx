@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   BarChart3, FolderOpen, Terminal, Activity,
   RefreshCw, Trash2, Plus, Inbox, Radio, Settings, ChevronRight, X,
-  Save, Edit2, Undo2, Check, Upload, FileText
+  Save, Edit2, Undo2, Check, Upload, FileText, AlertTriangle, LogOut, Eye
 } from "lucide-react";
 import BinaryRain from "@/components/BinaryRain";
 import PageTransition from "@/components/PageTransition";
@@ -17,6 +17,11 @@ const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
+  const [showSessionWarning, setShowSessionWarning] = useState(false);
+  const [sessionTimeLeft, setSessionTimeLeft] = useState(60);
+
+  const SESSION_DURATION = 10 * 60 * 1000; // 10 minutes
+  const WARNING_TIME = 9 * 60 * 1000; // 9 minutes
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isAddingProject, setIsAddingProject] = useState(false);
@@ -44,10 +49,51 @@ const Admin = () => {
   // Check session persistence on mount
   useEffect(() => {
     const isAuth = sessionStorage.getItem("admin_authenticated");
-    if (isAuth === "true") {
-      setIsAuthenticated(true);
+    const startTime = sessionStorage.getItem("admin_session_start");
+
+    if (isAuth === "true" && startTime) {
+      const elapsed = Date.now() - parseInt(startTime);
+      if (elapsed < SESSION_DURATION) {
+        setIsAuthenticated(true);
+      } else {
+        sessionStorage.removeItem("admin_authenticated");
+        sessionStorage.removeItem("admin_session_start");
+      }
     }
+
+    // Auto-logout on unmount (navigation away)
+    return () => {
+      // Small delay to check if we're actually navigating or just reloading
+      setTimeout(() => {
+        if (window.location.pathname !== "/admin") {
+          sessionStorage.removeItem("admin_authenticated");
+          sessionStorage.removeItem("admin_session_start");
+        }
+      }, 100);
+    };
   }, []);
+
+  // Session Monitor Effect
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const interval = setInterval(() => {
+      const startTime = sessionStorage.getItem("admin_session_start");
+      if (!startTime) return;
+
+      const elapsed = Date.now() - parseInt(startTime);
+
+      // Warning at 9 minutes
+      if (elapsed >= WARNING_TIME && elapsed < SESSION_DURATION) {
+        setShowSessionWarning(true);
+        setSessionTimeLeft(Math.ceil((SESSION_DURATION - elapsed) / 1000));
+      } else if (elapsed >= SESSION_DURATION) {
+        handleLogout();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
 
   // Load persistence data
   useEffect(() => {
@@ -97,11 +143,26 @@ const Admin = () => {
     if (password === correctKey) {
       setIsAuthenticated(true);
       sessionStorage.setItem("admin_authenticated", "true");
+      sessionStorage.setItem("admin_session_start", Date.now().toString());
       setLoginError(false);
     } else {
       setLoginError(true);
       setTimeout(() => setLoginError(false), 2000);
     }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setShowSessionWarning(false);
+    sessionStorage.removeItem("admin_authenticated");
+    sessionStorage.removeItem("admin_session_start");
+    addLogEvent("SESSION TERMINATED");
+  };
+
+  const extendSession = () => {
+    sessionStorage.setItem("admin_session_start", Date.now().toString());
+    setShowSessionWarning(false);
+    addLogEvent("SESSION EXTENDED");
   };
 
   // Sync with persistence
@@ -280,6 +341,19 @@ const Admin = () => {
               <h1 className="font-display text-xl md:text-2xl neon-text tracking-widest uppercase">
                 Mission Control
               </h1>
+              <div className="ml-auto flex items-center gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 rounded glass-panel border border-primary/30 bg-primary/5">
+                  <Eye className="w-4 h-4 text-primary animate-pulse" />
+                  <span className="font-display text-lg neon-text">{viewerCount}</span>
+                  <span className="text-[8px] font-mono text-primary/50 uppercase tracking-widest">Observers</span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-4 py-2 text-[9px] font-mono text-destructive/60 hover:text-destructive border border-destructive/20 hover:border-destructive/40 hover:bg-destructive/5 transition-all"
+                >
+                  <LogOut className="w-3 h-3" /> DISCONNECT
+                </button>
+              </div>
             </div>
 
             {/* Tabs Navigation */}
@@ -1008,6 +1082,58 @@ const Admin = () => {
           </div>
         </div>
       </div>
+
+      {/* Session Warning Modal */}
+      <AnimatePresence>
+        {showSessionWarning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="glass-panel neon-border p-8 max-w-md w-full mx-4 text-center space-y-6"
+            >
+              <div className="flex justify-center">
+                <div className="w-20 h-20 rounded-full border-2 border-accent/50 bg-accent/10 flex items-center justify-center">
+                  <AlertTriangle className="w-10 h-10 text-accent animate-pulse" />
+                </div>
+              </div>
+              <h2 className="font-display text-lg neon-text tracking-[0.3em] uppercase">Session Expiring</h2>
+              <p className="text-muted-foreground font-mono text-xs leading-relaxed">
+                &gt; Your clearance window is closing in <span className="text-accent font-bold text-sm">{sessionTimeLeft}s</span>.<br />
+                &gt; Extend your session or be disconnected from Mission Control.
+              </p>
+              <div className="flex gap-4">
+                <button
+                  onClick={extendSession}
+                  className="flex-1 glass-panel p-4 text-[10px] font-mono text-primary hover:neon-text transition-all bg-primary/10 border-primary/30 flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" /> STAY_CONNECTED
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex-1 glass-panel p-4 text-[10px] font-mono text-destructive hover:text-destructive transition-all bg-destructive/5 border-destructive/20 flex items-center justify-center gap-2"
+                >
+                  <LogOut className="w-3.5 h-3.5" /> DISCONNECT
+                </button>
+              </div>
+              <div className="h-1 bg-primary/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-accent"
+                  initial={{ width: "100%" }}
+                  animate={{ width: "0%" }}
+                  transition={{ duration: sessionTimeLeft, ease: "linear" }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageTransition>
   );
 };

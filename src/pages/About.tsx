@@ -61,7 +61,6 @@ const About = () => {
   useEffect(() => {
     const fetchHandles = async () => {
       const data = await persistence.getHandles();
-      console.log("DEBUG: Alien Handles Loaded", data);
       setHandles(data);
     };
     fetchHandles();
