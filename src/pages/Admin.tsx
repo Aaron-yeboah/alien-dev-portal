@@ -285,38 +285,99 @@ const Admin = () => {
       <PageTransition>
         <BinaryRain intensity={20} />
         <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+          <BackButton />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="glass-panel p-8 max-w-md w-full neon-border"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-center max-w-md w-full"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <Terminal className="w-6 h-6 text-primary" />
-              <h1 className="font-display text-xl neon-text tracking-widest uppercase">Admin Auth</h1>
-            </div>
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-mono text-primary/60 uppercase tracking-widest">Access Key</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`w-full bg-black/40 border ${loginError ? 'border-destructive' : 'border-primary/20'} p-3 text-sm text-foreground focus:border-primary outline-none transition-all font-mono`}
-                  placeholder="Enter clearance code..."
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full glass-panel p-4 text-[10px] font-mono text-primary hover:neon-text transition-all bg-primary/5 border-primary/20 flex items-center justify-center gap-2"
-              >
-                VERIFY CLEARANCE <ChevronRight className="w-3 h-3" />
-              </button>
-              {loginError && (
-                <p className="text-[9px] text-destructive font-mono text-center animate-pulse">
-                  &gt; ACCESS DENIED: INVALID CLEARANCE CODE
+            {/* Alien Image with Glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+              className="relative mb-[-2rem] z-10"
+            >
+              <div
+                className="absolute inset-0 rounded-full blur-3xl opacity-30"
+                style={{
+                  background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)",
+                  transform: "scale(0.7) translateY(10%)",
+                }}
+              />
+              <motion.img
+                src="/admin-alien.png"
+                alt="Admin Alien"
+                className="w-56 h-56 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-[0_0_30px_rgba(74,222,128,0.3)]"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.div>
+
+            {/* Auth Panel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="glass-panel p-8 w-full neon-border relative overflow-hidden"
+            >
+              {/* Subtle scanline effect */}
+              <div className="absolute inset-0 scanline pointer-events-none opacity-30" />
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <Terminal className="w-5 h-5 text-primary" />
+                  <h1 className="font-display text-lg neon-text tracking-[0.3em] uppercase">Admin Auth</h1>
+                  <Terminal className="w-5 h-5 text-primary" />
+                </div>
+                <p className="text-[9px] font-mono text-primary/40 text-center mb-6 tracking-widest uppercase">
+                  Secure clearance required to proceed
                 </p>
-              )}
-            </form>
+
+                <form onSubmit={handleLogin} className="space-y-5">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-primary/60 uppercase tracking-widest flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      Access Key
+                    </label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={`w-full bg-black/50 border ${loginError ? 'border-destructive animate-pulse' : 'border-primary/20'} p-3.5 text-sm text-foreground focus:border-primary focus:bg-primary/5 outline-none transition-all font-mono rounded-sm`}
+                      placeholder="Enter clearance code..."
+                    />
+                  </div>
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full glass-panel p-4 text-[10px] font-mono text-primary hover:neon-text transition-all bg-primary/5 border-primary/30 hover:border-primary/60 hover:bg-primary/10 flex items-center justify-center gap-2 tracking-widest"
+                  >
+                    VERIFY CLEARANCE <ChevronRight className="w-3 h-3" />
+                  </motion.button>
+                  <AnimatePresence>
+                    {loginError && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="text-[9px] text-destructive font-mono text-center animate-pulse tracking-wider"
+                      >
+                        &gt; ACCESS DENIED: INVALID CLEARANCE CODE
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </form>
+
+                <div className="mt-6 flex items-center justify-center gap-4">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent to-primary/20" />
+                  <span className="text-[8px] font-mono text-primary/30 tracking-[0.4em] uppercase">Encrypted</span>
+                  <div className="h-px flex-1 bg-gradient-to-l from-transparent to-primary/20" />
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </PageTransition>
