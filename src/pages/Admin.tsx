@@ -112,6 +112,12 @@ const Admin = () => {
       setMessages(msgData);
       setViewerCount(viewData);
       setCvUrl(cvData || null);
+
+      // Sync neural core slider with saved value
+      if (handleData?.neuralCores) {
+        const parsed = parseInt(handleData.neuralCores);
+        if (!isNaN(parsed)) setSystemIntensity(parsed);
+      }
     };
 
     loadData();
@@ -476,7 +482,11 @@ const Admin = () => {
                       min="0"
                       max="100"
                       value={systemIntensity}
-                      onChange={(e) => setSystemIntensity(parseInt(e.target.value))}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        setSystemIntensity(val);
+                        updateHandle("neuralCores", `${val}-NODE`);
+                      }}
                       className="w-full h-1 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary"
                     />
                     <button
