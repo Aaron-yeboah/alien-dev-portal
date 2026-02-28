@@ -7,9 +7,11 @@ import PageTransition from "@/components/PageTransition";
 import BackButton from "@/components/BackButton";
 import TopNav from "@/components/TopNav";
 import { persistence, Handles } from "@/utils/persistence";
+import { useNeuralIntensity } from "@/hooks/useNeuralIntensity";
 
 const Contact = () => {
   const [handles, setHandles] = useState<Handles | null>(null);
+  const neuralIntensity = useNeuralIntensity(15);
 
   useEffect(() => {
     const fetchHandles = async () => {
@@ -71,7 +73,7 @@ const Contact = () => {
 
   return (
     <PageTransition>
-      <BinaryRain intensity={15} />
+      <BinaryRain intensity={neuralIntensity} />
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 lg:py-16">
         <BackButton />
         <TopNav />

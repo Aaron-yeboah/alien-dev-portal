@@ -5,6 +5,7 @@ import alienImg from "@/assets/alien.jpeg";
 import GlassNavButton from "@/components/GlassNavButton";
 import BinaryRain from "@/components/BinaryRain";
 import PageTransition from "@/components/PageTransition";
+import { useNeuralIntensity } from "@/hooks/useNeuralIntensity";
 
 const navItems = [
   { to: "/about", label: "ABOUT DEV" },
@@ -14,10 +15,11 @@ const navItems = [
 
 const Index = () => {
   const [orbIntensity, setOrbIntensity] = useState(false);
+  const neuralIntensity = useNeuralIntensity(50);
 
   return (
     <PageTransition>
-      <BinaryRain />
+      <BinaryRain intensity={neuralIntensity} />
       <div className="relative z-10 flex min-h-screen flex-col">
         <div className="flex flex-1 items-center justify-center px-6 py-12 md:py-0">
           <div className="flex flex-col-reverse lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16 max-w-6xl w-full justify-center">

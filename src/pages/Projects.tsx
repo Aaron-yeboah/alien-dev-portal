@@ -6,9 +6,11 @@ import PageTransition from "@/components/PageTransition";
 import BackButton from "@/components/BackButton";
 import TopNav from "@/components/TopNav";
 import { persistence, Project } from "@/utils/persistence";
+import { useNeuralIntensity } from "@/hooks/useNeuralIntensity";
 
 const Projects = () => {
   const [projectList, setProjectList] = useState<Project[]>([]);
+  const neuralIntensity = useNeuralIntensity(50);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -20,7 +22,7 @@ const Projects = () => {
 
   return (
     <PageTransition>
-      <BinaryRain />
+      <BinaryRain intensity={neuralIntensity} />
       <div className="relative z-10 min-h-screen px-4 sm:px-6 py-20 lg:py-16">
         <BackButton />
         <TopNav />

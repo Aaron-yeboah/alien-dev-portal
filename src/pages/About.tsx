@@ -10,6 +10,7 @@ import PageTransition from "@/components/PageTransition";
 import BackButton from "@/components/BackButton";
 import TopNav from "@/components/TopNav";
 import { persistence, Handles } from "@/utils/persistence";
+import { useNeuralIntensity } from "@/hooks/useNeuralIntensity";
 
 const alienMoods = [mood1, mood2, mood3, mood4];
 
@@ -57,6 +58,7 @@ const teleportVariants = {
 const About = () => {
   const [handles, setHandles] = useState<Handles | null>(null);
   const [moodIndex, setMoodIndex] = useState(0);
+  const neuralIntensity = useNeuralIntensity(50);
 
   useEffect(() => {
     const fetchHandles = async () => {
@@ -80,7 +82,7 @@ const About = () => {
 
   return (
     <PageTransition>
-      <BinaryRain />
+      <BinaryRain intensity={neuralIntensity} />
       <div className="relative z-10 min-h-screen flex items-center justify-center px-6 py-20 lg:py-16">
         <BackButton />
         <TopNav />
