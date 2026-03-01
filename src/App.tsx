@@ -15,6 +15,7 @@ const queryClient = new QueryClient();
 
 import { useEffect } from "react";
 import { persistence } from "./utils/persistence";
+import { toast } from "./hooks/use-toast";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -26,6 +27,22 @@ const AnimatedRoutes = () => {
       persistence.incrementViewerCount();
       sessionStorage.setItem("alien_visited", "true");
     }
+
+    // Subscribe to new incoming signals so notifications pop up globally
+    const msgSub = persistence.subscribeToMessages((payload) => {
+      if (payload.new) {
+        toast({
+          title: `INCOMING SIGNAL: ${payload.new.sender_name}`,
+          description: payload.new.subject || "No subject provided.",
+          variant: "default",
+          className: "bg-black/90 border border-primary text-primary font-mono",
+        });
+      }
+    });
+
+    return () => {
+      msgSub.unsubscribe();
+    };
   }, []);
 
   return (
