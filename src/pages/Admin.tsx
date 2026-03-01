@@ -1078,32 +1078,23 @@ const Admin = () => {
                       </div>
 
                       {cvUrl && (
-                        <div className="flex flex-col gap-3">
-                          <div className="flex flex-col sm:flex-row items-center gap-3 p-4 bg-primary/10 border border-primary/30 rounded">
-                            <FileText className="w-6 h-6 text-primary hidden sm:block" />
-                            <div className="flex-1 flex flex-col w-full text-center sm:text-left">
-                              <span className="text-[10px] font-mono text-primary uppercase tracking-widest">Active Resume Blob</span>
-                              <span className="text-[8px] font-mono text-muted-foreground truncate max-w-[200px] md:max-w-[300px]">{cvUrl}</span>
-                            </div>
-                            <div className="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-                              <a
-                                href={cvUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex-1 sm:flex-none justify-center px-4 py-2 bg-primary text-black font-display text-[9px] tracking-[0.2em] transition-all hover:scale-105 active:scale-95 flex items-center gap-2 rounded-sm whitespace-nowrap"
-                              >
-                                <Eye className="w-3.5 h-3.5" />
-                                PREVIEW
-                              </a>
-                              <button
-                                onClick={handleDeleteCV}
-                                className="flex-1 sm:flex-none justify-center px-4 py-2 border border-destructive/40 text-destructive hover:bg-destructive/10 font-display text-[9px] tracking-[0.2em] transition-all hover:scale-105 active:scale-95 flex items-center gap-2 rounded-sm whitespace-nowrap"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                                DELETE
-                              </button>
-                            </div>
-                          </div>
+                        <div className="grid grid-cols-2 gap-4 mt-1">
+                          <a
+                            href={cvUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="glass-panel neon-border p-4 flex items-center justify-center gap-3 text-[10px] font-mono transition-all hover:bg-primary/10 group text-primary"
+                          >
+                            <Eye className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            PREVIEW_RESUME
+                          </a>
+                          <button
+                            onClick={handleDeleteCV}
+                            className="glass-panel p-4 flex items-center justify-center gap-3 text-[10px] font-mono transition-all hover:bg-destructive/10 border-destructive/30 border text-destructive group"
+                          >
+                            <Trash2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                            DELETE_BLOB
+                          </button>
                         </div>
                       )}
                     </div>
