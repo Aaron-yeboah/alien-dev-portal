@@ -1038,22 +1038,21 @@ const Admin = () => {
                     <div className="flex flex-col gap-4">
                       {cvUrl && (
                         <div className="flex flex-col gap-3">
-                          <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded">
-                            <FileText className="w-4 h-4 text-primary" />
-                            <span className="text-[9px] font-mono text-muted-foreground truncate flex-1">{cvUrl}</span>
-                            <a href={cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:neon-text transition-all font-mono text-[9px] uppercase">Open_External</a>
-                          </div>
-                          {/* CV iframe preview so the user can review it right in the dashboard */}
-                          <div className="w-full h-64 border border-primary/20 rounded overflow-hidden relative group bg-black/40">
-                            <div className="absolute top-0 left-0 w-full bg-primary/10 px-3 py-1 text-[8px] font-mono text-primary/60 uppercase tracking-widest border-b border-primary/20 flex justify-between">
-                              <span>Live Preview Window</span>
-                              <span className="animate-pulse flex items-center gap-1"><Check className="w-2.5 h-2.5" /> Sync Active</span>
+                          <div className="flex items-center gap-3 p-4 bg-primary/10 border border-primary/30 rounded">
+                            <FileText className="w-6 h-6 text-primary" />
+                            <div className="flex-1 flex flex-col">
+                              <span className="text-[10px] font-mono text-primary uppercase tracking-widest">Active Resume Blob Detected</span>
+                              <span className="text-[8px] font-mono text-muted-foreground truncate">{cvUrl}</span>
                             </div>
-                            <iframe
-                              src={cvUrl}
-                              className="w-full h-full pt-6 opacity-70 group-hover:opacity-100 transition-opacity bg-white/5"
-                              title="CV Preview"
-                            />
+                            <a
+                              href={cvUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-2 bg-primary text-black font-display text-[10px] tracking-[0.2em] transition-all hover:scale-105 active:scale-95 flex items-center gap-2 rounded-sm whitespace-nowrap"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                              PREVIEW CV
+                            </a>
                           </div>
                         </div>
                       )}
