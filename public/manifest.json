@@ -1,0 +1,28 @@
+{
+    "name": "Alien Dev Portfolio",
+    "short_name": "Alien Dev",
+    "description": "Official portfolio of Alien Dev - Specialist in web technologies and UI/UX infiltration.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#00ff00",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "/alien-new.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/alien-new.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
