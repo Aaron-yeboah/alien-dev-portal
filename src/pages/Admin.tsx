@@ -269,10 +269,25 @@ const Admin = () => {
       const url = await persistence.getCVUrl();
       setCvUrl(url || null);
       addLogEvent(`CV UPLOADED: ${file.name}`);
-      alert("Specimen resume updated successfully.");
     } catch (error) {
       console.error(error);
       alert("Failed to upload CV. Check permissions.");
+    } finally {
+      setIsUploadingCV(false);
+    }
+  };
+
+  const handleDeleteCV = async () => {
+    if (!confirm("Are you sure you want to delete the active resume? This will instantly remove it from the public portal.")) return;
+
+    setIsUploadingCV(true);
+    try {
+      await persistence.deleteCV();
+      setCvUrl(null);
+      addLogEvent("CV DELETED");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete CV.");
     } finally {
       setIsUploadingCV(false);
     }
@@ -1036,27 +1051,6 @@ const Admin = () => {
                   <div className="space-y-4 pt-6 border-t border-primary/10">
                     <label className="text-[10px] text-primary/60 font-mono uppercase tracking-[0.2em]">Specimen Resume (CV)</label>
                     <div className="flex flex-col gap-4">
-                      {cvUrl && (
-                        <div className="flex flex-col gap-3">
-                          <div className="flex items-center gap-3 p-4 bg-primary/10 border border-primary/30 rounded">
-                            <FileText className="w-6 h-6 text-primary" />
-                            <div className="flex-1 flex flex-col">
-                              <span className="text-[10px] font-mono text-primary uppercase tracking-widest">Active Resume Blob Detected</span>
-                              <span className="text-[8px] font-mono text-muted-foreground truncate">{cvUrl}</span>
-                            </div>
-                            <a
-                              href={cvUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-4 py-2 bg-primary text-black font-display text-[10px] tracking-[0.2em] transition-all hover:scale-105 active:scale-95 flex items-center gap-2 rounded-sm whitespace-nowrap"
-                            >
-                              <Eye className="w-3.5 h-3.5" />
-                              PREVIEW CV
-                            </a>
-                          </div>
-                        </div>
-                      )}
-
                       <div className="relative mt-2">
                         <input
                           type="file"
@@ -1082,6 +1076,36 @@ const Admin = () => {
                           )}
                         </label>
                       </div>
+
+                      {cvUrl && (
+                        <div className="flex flex-col gap-3">
+                          <div className="flex flex-col sm:flex-row items-center gap-3 p-4 bg-primary/10 border border-primary/30 rounded">
+                            <FileText className="w-6 h-6 text-primary hidden sm:block" />
+                            <div className="flex-1 flex flex-col w-full text-center sm:text-left">
+                              <span className="text-[10px] font-mono text-primary uppercase tracking-widest">Active Resume Blob</span>
+                              <span className="text-[8px] font-mono text-muted-foreground truncate max-w-[200px] md:max-w-[300px]">{cvUrl}</span>
+                            </div>
+                            <div className="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                              <a
+                                href={cvUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex-1 sm:flex-none justify-center px-4 py-2 bg-primary text-black font-display text-[9px] tracking-[0.2em] transition-all hover:scale-105 active:scale-95 flex items-center gap-2 rounded-sm whitespace-nowrap"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                PREVIEW
+                              </a>
+                              <button
+                                onClick={handleDeleteCV}
+                                className="flex-1 sm:flex-none justify-center px-4 py-2 border border-destructive/40 text-destructive hover:bg-destructive/10 font-display text-[9px] tracking-[0.2em] transition-all hover:scale-105 active:scale-95 flex items-center gap-2 rounded-sm whitespace-nowrap"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                DELETE
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

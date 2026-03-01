@@ -243,5 +243,25 @@ export const persistence = {
     getCVUrl: async () => {
         const handles = await persistence.getHandles();
         return handles?.cv_url || null;
+    },
+
+    deleteCV: async () => {
+        const currentHandles = await persistence.getHandles();
+        if (!currentHandles?.cv_url) return;
+
+        // Try deleting the actual file from the bucket (extract filename from URL)
+        try {
+            const urlParts = currentHandles.cv_url.split('/');
+            const fileName = urlParts[urlParts.length - 1];
+            if (fileName) {
+                await supabase.storage.from('resumes').remove([fileName]);
+            }
+        } catch (e) {
+            console.error("Failed to delete file from storage:", e);
+        }
+
+        // Just clear the DB URL
+        const updatedHandles = { ...currentHandles, cv_url: null };
+        await persistence.saveHandles(updatedHandles);
     }
 };
