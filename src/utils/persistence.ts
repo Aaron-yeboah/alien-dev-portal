@@ -201,7 +201,8 @@ export const persistence = {
 
     uploadCV: async (file: File) => {
         const fileExt = file.name.split('.').pop();
-        const fileName = `specimen_resume.${fileExt}`;
+        const timestamp = new Date().getTime();
+        const fileName = `specimen_resume_${timestamp}.${fileExt}`;
         const filePath = `${fileName}`;
 
         // Upload to 'resumes' bucket

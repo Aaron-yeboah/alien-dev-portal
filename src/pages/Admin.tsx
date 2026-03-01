@@ -1037,13 +1037,28 @@ const Admin = () => {
                     <label className="text-[10px] text-primary/60 font-mono uppercase tracking-[0.2em]">Specimen Resume (CV)</label>
                     <div className="flex flex-col gap-4">
                       {cvUrl && (
-                        <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded">
-                          <FileText className="w-4 h-4 text-primary" />
-                          <span className="text-[9px] font-mono text-muted-foreground truncate flex-1">{cvUrl}</span>
-                          <a href={cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:neon-text transition-all font-mono text-[9px] uppercase">View</a>
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded">
+                            <FileText className="w-4 h-4 text-primary" />
+                            <span className="text-[9px] font-mono text-muted-foreground truncate flex-1">{cvUrl}</span>
+                            <a href={cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:neon-text transition-all font-mono text-[9px] uppercase">Open_External</a>
+                          </div>
+                          {/* CV iframe preview so the user can review it right in the dashboard */}
+                          <div className="w-full h-64 border border-primary/20 rounded overflow-hidden relative group bg-black/40">
+                            <div className="absolute top-0 left-0 w-full bg-primary/10 px-3 py-1 text-[8px] font-mono text-primary/60 uppercase tracking-widest border-b border-primary/20 flex justify-between">
+                              <span>Live Preview Window</span>
+                              <span className="animate-pulse flex items-center gap-1"><Check className="w-2.5 h-2.5" /> Sync Active</span>
+                            </div>
+                            <iframe
+                              src={cvUrl}
+                              className="w-full h-full pt-6 opacity-70 group-hover:opacity-100 transition-opacity bg-white/5"
+                              title="CV Preview"
+                            />
+                          </div>
                         </div>
                       )}
-                      <div className="relative">
+
+                      <div className="relative mt-2">
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx"
@@ -1054,14 +1069,18 @@ const Admin = () => {
                         />
                         <label
                           htmlFor="cv-upload"
-                          className={`w-full glass-panel p-4 flex items-center justify-center gap-3 text-[10px] font-mono transition-all cursor-pointer border-dashed border-2 hover:border-primary/50 group ${isUploadingCV ? 'opacity-50 pointer-events-none' : 'hover:bg-primary/5'}`}
+                          className={`w-full glass-panel p-4 flex items-center justify-center gap-3 text-[10px] font-mono transition-all cursor-pointer border-dashed border-2 hover:border-primary/50 group ${isUploadingCV ? 'opacity-50 pointer-events-none border-primary' : 'hover:bg-primary/5 border-primary/20'}`}
                         >
                           {isUploadingCV ? (
                             <RefreshCw className="w-4 h-4 animate-spin text-primary" />
                           ) : (
-                            <Upload className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                            <Upload className="w-4 h-4 text-primary group-hover:scale-110 group-hover:-translate-y-1 transition-all" />
                           )}
-                          {isUploadingCV ? "UPLOADING_SPECIMEN..." : "UPLOAD_NEW_RESUME_BLOB"}
+                          {isUploadingCV ? (
+                            <span className="animate-pulse">UPLOADING_SPECIMEN_TO_SUBSPACE...</span>
+                          ) : (
+                            cvUrl ? "OVERWRITE_EXISTING_RESUME_BLOB" : "UPLOAD_NEW_RESUME_BLOB"
+                          )}
                         </label>
                       </div>
                     </div>
