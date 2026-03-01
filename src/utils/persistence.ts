@@ -223,21 +223,21 @@ export const persistence = {
             .getPublicUrl(filePath);
 
         const publicUrl = urlData?.publicUrl;
-        if (publicUrl) {
-            const currentHandles = await persistence.getHandles();
-            const handlesToSave = currentHandles
-                ? { ...currentHandles, cv_url: publicUrl }
-                : {
-                    email: "", github: "", discord: "", twitter: "", linkedin: "",
-                    location: "", clearance: "LEVEL-1", neuralCores: "1-NODE",
-                    uptime: "100%", frequency: "1GHz", protocol: "X-0",
-                    encryption: "NONE", cv_url: publicUrl
-                } as Handles;
+        if (!publicUrl) throw new Error("Failed to generate public URL for uploaded CV.");
 
-            await persistence.saveHandles(handlesToSave);
-        }
+        const currentHandles = await persistence.getHandles();
+        const handlesToSave = currentHandles
+            ? { ...currentHandles, cv_url: publicUrl }
+            : {
+                email: "", github: "", discord: "", twitter: "", linkedin: "",
+                location: "", clearance: "LEVEL-1", neuralCores: "1-NODE",
+                uptime: "100%", frequency: "1GHz", protocol: "X-0",
+                encryption: "NONE", cv_url: publicUrl
+            } as Handles;
 
-        return filePath;
+        await persistence.saveHandles(handlesToSave);
+
+        return publicUrl;
     },
 
     getCVUrl: async () => {
