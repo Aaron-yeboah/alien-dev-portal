@@ -241,6 +241,30 @@ export const persistence = {
     },
 
     getCVUrl: async () => {
+        try {
+            // Priority: Directly fetch the actual latest file from the storage bucket to bypass DB RLS issues
+            const { data: files, error } = await supabase.storage.from('resumes').list();
+
+            if (!error && files && files.length > 0) {
+                // Filter out any empty hidden placeholders and sort by creation time (newest first)
+                const validFiles = files
+                    .filter(f => f.name !== '.emptyFolderPlaceholder' && f.name !== '.empty')
+                    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+                if (validFiles.length > 0) {
+                    const latestFile = validFiles[0];
+                    const { data: urlData } = supabase.storage.from('resumes').getPublicUrl(latestFile.name);
+
+                    if (urlData?.publicUrl) {
+                        return urlData.publicUrl;
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Storage list failed:", e);
+        }
+
+        // Fallback: Check handles DB
         const handles = await persistence.getHandles();
         return handles?.cv_url || null;
     },

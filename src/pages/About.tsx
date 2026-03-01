@@ -63,7 +63,14 @@ const About = () => {
   useEffect(() => {
     const fetchHandles = async () => {
       const data = await persistence.getHandles();
-      setHandles(data);
+      const actualCvUrl = await persistence.getCVUrl();
+
+      // Merge the strictly fetched url into the handles state
+      if (data) {
+        setHandles({ ...data, cv_url: actualCvUrl });
+      } else if (actualCvUrl) {
+        setHandles({ cv_url: actualCvUrl } as Handles);
+      }
     };
     fetchHandles();
 
