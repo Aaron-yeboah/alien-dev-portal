@@ -50,10 +50,6 @@ const NotFound = () => {
               Signal Lost
             </div>
 
-            <h1 className="font-display text-5xl md:text-7xl neon-text mb-2 tracking-tighter">
-              404
-            </h1>
-
             <p className="text-muted-foreground text-sm md:text-base font-mono leading-relaxed max-w-md mx-auto md:mx-0">
               &gt; ERROR: SUBSPACE_COORDINATES_INVALID<br />
               &gt; REASON: Requested node does not exist in current reality.<br />
