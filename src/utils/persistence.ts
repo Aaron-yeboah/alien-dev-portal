@@ -198,6 +198,12 @@ export const persistence = {
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'site_stats' }, callback)
             .subscribe();
     },
+    subscribeToHandles: (callback: (payload: any) => void) => {
+        return supabase
+            .channel('public:handles')
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'handles' }, callback)
+            .subscribe();
+    },
 
     uploadCV: async (file: File) => {
         const fileExt = file.name.split('.').pop();

@@ -10,6 +10,7 @@ export function useNeuralIntensity(defaultIntensity = 50): number {
 
     useEffect(() => {
         let cancelled = false;
+
         const fetch = async () => {
             try {
                 const handles = await persistence.getHandles();
@@ -23,7 +24,19 @@ export function useNeuralIntensity(defaultIntensity = 50): number {
             }
         };
         fetch();
-        return () => { cancelled = true; };
+
+        // Subscribe to real-time updates from Supabase
+        const sub = persistence.subscribeToHandles((payload) => {
+            if (payload.new && payload.new.neuralCores) {
+                const parsed = parseInt(payload.new.neuralCores);
+                if (!isNaN(parsed)) setIntensity(parsed);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+            sub.unsubscribe();
+        };
     }, []);
 
     return intensity;
